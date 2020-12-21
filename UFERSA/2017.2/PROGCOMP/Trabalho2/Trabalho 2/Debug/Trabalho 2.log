@@ -1,0 +1,5 @@
+﻿  concurso.cpp
+c:\users\vitor\source\repos\trabalho 2\trabalho 2\concurso.cpp(7): warning C4244: 'return': conversão de 'double' para 'int', possível perda de dados
+  estatisticas.cpp
+  Gerando Código...
+  Trabalho 2.vcxproj -> C:\Users\vitor\source\repos\Trabalho 2\Debug\Trabalho 2.exe

@@ -1,0 +1,50 @@
+.data
+	
+	a:	.word	0
+	b:	.word	0
+	textA:	.asciiz	"a: "
+	textB:	.ascii	"\nb: "
+.text
+	li	$v0, 5
+	syscall	
+	la	$s0, ($v0)
+	
+	li	$v0, 5
+	syscall
+	la	$s1 ($v0)
+	
+	sle	$t0, $s0, $s1
+	
+	beqz	$t0, AmaiorB
+	
+	add	$s0, $s0, $s1	#a = a + b
+	
+	j	saida
+	
+	AmaiorB:
+		sub	$s0, $s0, $s1	#a = a - b
+		
+	saida:
+		sw	$s0, a
+		sw	$s1, b
+		
+		#Imprime a
+		la	$a0, textA
+		li	$v0, 4
+		syscall
+		
+		lw	$a0, a
+		li	$v0, 1
+		syscall
+		
+		#Imprime b
+		la	$a0, textB
+		li	$v0, 4
+		syscall
+		
+		lw	$a0, b
+		li	$v0, 1
+		syscall
+		
+		li	$v0, 10
+		syscall
