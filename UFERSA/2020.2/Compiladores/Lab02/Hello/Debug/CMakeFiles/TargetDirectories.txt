@@ -1,0 +1,3 @@
+/home/vitor/Hello/Debug/CMakeFiles/rebuild_cache.dir
+/home/vitor/Hello/Debug/CMakeFiles/hello.dir
+/home/vitor/Hello/Debug/CMakeFiles/edit_cache.dir
