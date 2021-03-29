@@ -31,132 +31,105 @@ class Locadora {
 		// https://www.tutorialspoint.com/java/util/calendar_setfield4
 		// create a calendar
 		Calendar cal = Calendar.getInstance();
+		Calendar cal1 = Calendar.getInstance();
+
+		// set the year,month, day, hour, minute, second
+		// the month starts with 0 and goes to 11
+		cal.set(2021, 3, 04, 04, 15, 20);
+		cal1.set(2021, 3, 30, 04, 15, 20);
 
 		// print current time
 		//System.out.println("Current year is :" + cal.getTime());
 
 		// Livro
-		System.out.println("Titulo: " + livro1.getTitulo());
-		System.out.println("Genero: " + livro1.getGenero());
-		System.out.println("Numero de paginas: " + livro1.getNumeroPaginas());
-		System.out.println("Numero de exemplares: " + livro1.getNumeroExemplares());
-		System.out.println("Numero de emprestimos: " + livro1.getNumeroEmprestimos());
-		System.out.println("Numero de dias alugado: " + livro1.getNumeroDiasAlugado());
-		System.out.println("Ano de lancamento: " + livro1.getAnoLancamento());
-		System.out.println("Valor do aluguel: " + livro1.getValorAluguel());
+		System.out.println("\nLivro\n");
+		System.out.println(livro1);
 
 		System.out.println();
 
 		// Disco
-		System.out.println("Titulo: " + disco1.getTitulo());
-		System.out.println("Nome da banda: " + disco1.getNomeBanda());
-		System.out.println("Estilo: " + disco1.getEstilo());
-		System.out.println("Numero de exemplares: " + disco1.getNumeroExemplares());
-		System.out.println("Numero de emprestimos: " + disco1.getNumeroEmprestimos());
-		System.out.println("Numero de dias alugado: " + disco1.getNumeroDiasAlugado());
-		System.out.println("Ano de lancamento: " + disco1.getAnoLancamento());
-		System.out.println("Valor do aluguel: " + disco1.getValorAluguel());
+		System.out.println("\nDisco\n");
+		System.out.println(disco1);
 
 		System.out.println();
 
 		// Cliente
-		System.out.println("Nome: " + cliente1.getNome());
-		System.out.println("CPF: " + cliente1.getCpf());
-		System.out.println("Endereco: " + cliente1.getEndereco());
-		System.out.println("Email: " + cliente1.getEmail());
-		System.out.println("Telefone: " + cliente1.getTelefone());
-		if (cliente1.getLivro() != null) {
-			System.out.println("Livros: ");
-
-			for (int x = 0; x < cliente1.getLivro().length; x++) {
-				System.out.println();
-			}
-		}
+		System.out.println("\nCliente\n");
+		System.out.println(cliente1);
 		
 		System.out.println();
 
 		// Usuário
-		System.out.println("Login: " + usuario1.getLogin());
-		System.out.println("Senha: " + usuario1.getSenha());
-		System.out.println("Nome: " + usuario1.getNome());
-		System.out.println("CPF: " + usuario1.getCpf());
-		System.out.println("Endereco: " + usuario1.getEndereco());
-		System.out.println("Email: " + usuario1.getEmail());
-		System.out.println("Telefone: " + usuario1.getTelefone());
+		System.out.println("\nUsuario\n");
+		System.out.println(usuario1);
 
 		System.out.println();
 
 		// Funcionário
-		System.out.println("Login: " + funcionario1.getLogin());
-		System.out.println("Senha: " + funcionario1.getSenha());
-		System.out.println("Nome: " + funcionario1.getNome());
-		System.out.println("CPF: " + funcionario1.getCpf());
-		System.out.println("Endereco: " + funcionario1.getEndereco());
-		System.out.println("Email: " + funcionario1.getEmail());
-		System.out.println("Telefone: " + funcionario1.getTelefone());
+		System.out.println("\nFuncionario\n");
+		System.out.println(funcionario1);
 
 		System.out.println();
 
 		// Gerente
-		System.out.println("Login: " + gerente1.getLogin());
-		System.out.println("Senha: " + gerente1.getSenha());
-		System.out.println("Nome: " + gerente1.getNome());
-		System.out.println("CPF: " + gerente1.getCpf());
-		System.out.println("Endereco: " + gerente1.getEndereco());
-		System.out.println("Email: " + gerente1.getEmail());
-		System.out.println("Telefone: " + gerente1.getTelefone());
+		System.out.println("\nGerente\n");
+		System.out.println(gerente1);
 
 		System.out.println();
 
 		// Empréstimo
-		System.out.print("Faturamento: R$");
-		System.out.printf("%.2f", Emprestimo.getFaturamento());
+		System.out.println("\nEmprestimo\n");
+		System.out.print(emprestimo1);
+		
 		System.out.println();
 
-		// https://www.tutorialspoint.com/java/util/calendar_setfield4
-		// set the year,month and day to something else
-		cal.set(2050, 5, 25, 04, 15, 20);
-		
-		emprestimo1.setDataDevolucao(cal);
-		System.out.println("Data de devolucao: " + emprestimo1.getDataDevolucao().getTime());
-		
-		// livro, quantidade, cliente, dataDevolucao
+		System.out.println("\n-----------------------Emprestou 1 livro-------------------------");
+
+		// livro, quantidade, cliente, dataDevolucaoProposta
 		emprestimo1.alugarLivro(livro1, 2, cliente1, cal);
 
-		System.out.print("Faturamento: R$");
-		System.out.printf("%.2f", Emprestimo.getFaturamento());
-		System.out.println();
-
+		// Empréstimo
+		System.out.println("\nEmprestimo\n");
+		System.out.print(emprestimo1);
+		
 		System.out.println();
 
 		// Livro
-		System.out.println("Titulo: " + livro1.getTitulo());
-		System.out.println("Genero: " + livro1.getGenero());
-		System.out.println("Numero de paginas: " + livro1.getNumeroPaginas());
-		System.out.println("Numero de exemplares: " + livro1.getNumeroExemplares());
-		System.out.println("Numero de emprestimos: " + livro1.getNumeroEmprestimos());
-		System.out.println("Numero de dias alugado: " + livro1.getNumeroDiasAlugado());
-		System.out.println("Ano de lancamento: " + livro1.getAnoLancamento());
-		System.out.println("Valor do aluguel: " + livro1.getValorAluguel());
+		System.out.println("\nLivro\n");
+		System.out.println(livro1);
 
 		System.out.println();
 
+		// Cliente
+		System.out.println("\nCliente\n");
+		System.out.println(cliente1);
+		
+		System.out.println();
+
+		System.out.println("\n-----------------------Emprestou 1 livro e 1 disco--------------------------");
+
+		// livro, quantidade, cliente, dataDevolucaoProposta
 		emprestimo1.alugarLivro(livro2, 1, cliente1, cal);
+		emprestimo1.alugarDisco(disco1, 1, cliente1, cal);
 
-		System.out.println("Titulo: " + livro2.getTitulo());
-		System.out.println("Genero: " + livro2.getGenero());
-		System.out.println("Numero de paginas: " + livro2.getNumeroPaginas());
-		System.out.println("Numero de exemplares: " + livro2.getNumeroExemplares());
-		System.out.println("Numero de emprestimos: " + livro2.getNumeroEmprestimos());
-		System.out.println("Numero de dias alugado: " + livro2.getNumeroDiasAlugado());
-		System.out.println("Ano de lancamento: " + livro2.getAnoLancamento());
-		System.out.println("Valor do aluguel: " + livro2.getValorAluguel());
+		// Cliente
+		System.out.println("\nCliente\n");
+		System.out.println(cliente1);
+		
+		System.out.println();
 
-		if (cliente1.getLivro() != null) {
-			System.out.println("Livros: ");
-			for (int x = 0; x < cliente1.getLivro().length; x++) {
-				System.out.println(cliente1.getLivro()[x].getTitulo());
-			}
-		}
+		System.out.println("\n--------------------Devolveu 2 livros e 1 disco---------------------------");
+
+		// livro, quantidade, cliente, dataDevolucaoEfetiva
+		emprestimo1.devolverLivro(livro1, 5, cliente1, cal1);
+		emprestimo1.devolverLivro(livro2, 5, cliente1, cal1);
+		emprestimo1.devolverDisco(disco1, 5, cliente1, cal1);
+		//System.out.println("Numero de exemplares: " + livro1.getNumeroExemplares());
+
+		// Cliente
+		System.out.println("\nCliente\n");
+		System.out.println(cliente1);
+		
+		System.out.println();
 	}
 }

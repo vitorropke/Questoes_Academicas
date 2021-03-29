@@ -29,6 +29,39 @@ class Cliente {
 		setTelefone(telefone);
 	}
 
+	public String toString() {
+		String cliente = "";
+
+		cliente = "Nome:     " + nome;
+		cliente += "\nCPF:      " + cpf;
+		cliente += "\nEndereco: " + endereco;
+		cliente += "\nEmail:    " + email;
+		cliente += "\nTelefone: " + telefone;
+		cliente += "\nLivro:    ";
+
+		if (livro != null) {
+			for (int x = 0; x < livro.length; x++) {
+				cliente += "\n\n" + livro[x].toString();
+			}
+			cliente += "\n";
+		} else {
+			cliente += "Sem livros";
+		}
+
+		cliente += "\nDisco:    ";
+
+		if (disco != null) {
+			for (int x = 0; x < disco.length; x++) {
+				cliente += "\n\n" + disco[x].toString();
+			}
+			cliente += "\n";
+		} else {
+			cliente += "Sem discos";
+		}
+		
+		return cliente;
+	}
+
 	// Getters e Setters
 	public String getNome() {
 		return nome;
@@ -155,18 +188,23 @@ class Cliente {
 	public void setLivro(Livro[] livro) {
 		this.livro = livro;
 	}
-	/*
+	
 	public Disco[] getDisco() {
-		Disco[] disco = new Livro[this.disco.length];
+		if (this.disco == null) {
+			return null;
+		}
 
+		Disco[] discos = new Disco[this.disco.length];
 
+		for (int x = 0; x < this.disco.length; x++) {
+			discos[x] = this.disco[x];
+		}
 
-		return disco;
+		return discos;
 	}
 	public void setDisco(Disco[] disco) {
-		this.livro = livro;
+		this.disco = disco;
 	}
-	*/
 
 	/*
 	// Métodos
@@ -177,7 +215,7 @@ class Cliente {
 	public void alterar(Cliente cliente) {
 		// altera os atributos do cliente no "banco de dados"
 	}
-	
+	*/
 	public void deletar(Cliente cliente) {
 		// apaga o cliente do "banco de dados"
 		
@@ -186,10 +224,10 @@ class Cliente {
 		cliente.endereco = null;
 		cliente.email = null;
 		cliente.telefone = null;
-		cliente.livro[] = null;
-		cliente.disco[] = null;
+		cliente.livro = null;
+		cliente.disco = null;
 	}
-
+	/*
 	public Cliente[] pesquisarNome(String nome) {
 		return Cliente;
 	}

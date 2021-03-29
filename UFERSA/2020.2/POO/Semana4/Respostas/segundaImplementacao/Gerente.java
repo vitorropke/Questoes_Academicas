@@ -37,6 +37,20 @@ class Gerente {
 		setTelefone(telefone);
 	}
 
+	public String toString() {
+		String gerente = "";
+
+		gerente = "Login:    " + login;
+		gerente += "\nSenha:    " + senha;
+		gerente += "\nNome:     " + nome;
+		gerente += "\nCPF:      " + cpf;
+		gerente += "\nEndereco: " + endereco;
+		gerente += "\nEmail:    " + email;
+		gerente += "\nTelefone: " + telefone;
+		
+		return gerente;
+	}
+
 	// Getters e Setters
 	public String getLogin() {
 		return login;

@@ -37,6 +37,20 @@ class Usuario {
 		setTelefone(telefone);
 	}
 
+	public String toString() {
+		String usuario = "";
+
+		usuario = "Login:    " + login;
+		usuario += "\nSenha:    " + senha;
+		usuario += "\nNome:     " + nome;
+		usuario += "\nCPF:      " + cpf;
+		usuario += "\nEndereco: " + endereco;
+		usuario += "\nEmail:    " + email;
+		usuario += "\nTelefone: " + telefone;
+		
+		return usuario;
+	}
+
 	// Getters e Setters
 	public String getLogin() {
 		return login;

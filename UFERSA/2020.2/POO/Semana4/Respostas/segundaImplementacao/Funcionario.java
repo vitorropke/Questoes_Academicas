@@ -37,6 +37,20 @@ class Funcionario {
 		setTelefone(telefone);
 	}
 
+	public String toString() {
+		String funcionario = "";
+
+		funcionario = "Login:    " + login;
+		funcionario += "\nSenha:    " + senha;
+		funcionario += "\nNome:     " + nome;
+		funcionario += "\nCPF:      " + cpf;
+		funcionario += "\nEndereco: " + endereco;
+		funcionario += "\nEmail:    " + email;
+		funcionario += "\nTelefone: " + telefone;
+		
+		return funcionario;
+	}
+
 	// Getters e Setters
 	public String getLogin() {
 		return login;
@@ -178,7 +192,7 @@ class Funcionario {
 	public void alterar(Funcionario funcionario) {
 		// altera os atributos do funcionário no "banco de dados"
 	}
-
+	*/
 	public void deletar(Funcionario funcionario) {
 		// remove o funcionário do "banco de dados"
 		funcionario.login = null;
@@ -189,5 +203,4 @@ class Funcionario {
 		funcionario.email = null;
 		funcionario.telefone = null;
 	}
-	*/
 }

@@ -35,6 +35,22 @@ class Livro {
 		setAnoLancamento(anoLancamento);
 		setValorAluguel(valorAluguel);
 	}
+
+	public String toString() {
+		String livro = "";
+		String valorAluguelDoisDecimais = String.format("%.02f", valorAluguel);
+
+		livro = "Titulo:                 " + titulo;
+		livro += "\nGenero:                 " + genero;
+		livro += "\nNumero de paginas:      " + numeroPaginas;
+		livro += "\nNumero de exemplares:   " + numeroExemplares;
+		livro += "\nNumero de emprestimos:  " + numeroEmprestimos;
+		livro += "\nNumero de dias alugado: " + numeroDiasAlugado;
+		livro += "\nAno de lancamento:      " + anoLancamento;
+		livro += "\nValor do aluguel:       " + "R$" + valorAluguelDoisDecimais;
+		
+		return livro;
+	}
 	
 	// Getters e Setters
 	public String getTitulo() {

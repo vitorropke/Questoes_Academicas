@@ -35,6 +35,22 @@ class Disco {
 		setValorAluguel(valorAluguel);
 	}
 
+	public String toString() {
+		String disco = "";
+		String valorAluguelDoisDecimais = String.format("%.02f", valorAluguel);
+
+		disco = "Titulo:                 " + titulo;
+		disco += "\nNome da banda:          " + nomeBanda;
+		disco += "\nEstilo:                 " + estilo;
+		disco += "\nNumero de exemplares:   " + numeroExemplares;
+		disco += "\nNumero de emprestimos:  " + numeroEmprestimos;
+		disco += "\nNumero de dias alugado: " + numeroDiasAlugado;
+		disco += "\nAno de lancamento:      " + anoLancamento;
+		disco += "\nValor do aluguel:       " + "R$" + valorAluguelDoisDecimais;
+		
+		return disco;
+	}
+
 	// Getters e Setters
 	public String getTitulo() {
 		return titulo;
