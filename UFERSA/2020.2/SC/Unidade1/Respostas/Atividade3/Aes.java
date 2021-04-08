@@ -33,15 +33,19 @@ public class Aes {
 		// verifica se a chave possui 128 bits (16 caracteres), 192 bits (24 caracteres) ou 256 bits (32 caracteres)
 		if (tamanhoChave != 16 && tamanhoChave != 24 && tamanhoChave != 32) {
 			System.out.println("Falha na encriptacao. Chave possui tamanho inválido.");
-			return chaves;
+			String[] vazio = { "" };
+			return vazio;
 		}
 
+		int numeroPalavras;
+		// 128 bits
 		if (tamanhoChave == 16) {
 			String hexChave;			// contém o formato hexadecimal da chave
-			chaves = new String[44];
+			chaves = new String[44];	// 44 subchaves
+			numeroPalavras = 4;
 
 			// string para hex
-			// "%032x" significa que a string terá 32 caracteres
+			// "%032x" significa que a string hexadecimal terá 32 caracteres
 			hexChave = String.format("%032x", new BigInteger(1, chave.getBytes()));
 			//hexChave = "2b7e151628aed2a6abf7158809cf4f3c";
 			System.out.print("Chave hexadecimal:   ");
@@ -54,28 +58,17 @@ public class Aes {
 			chaves[1] = hexChave.substring(8, 16);
 			chaves[2] = hexChave.substring(16, 24);
 			chaves[3] = hexChave.substring(24, 32);
-/*
-			System.out.print("1: ");
-			System.out.print(chaves[0]);
-			System.out.print("  2: ");
-			System.out.print(chaves[1]);
-			System.out.print("  3: ");
-			System.out.print(chaves[2]);
-			System.out.print("  4: ");
-			System.out.print(chaves[3]);
 
-			System.out.println();
-*/
 			String	rotWordChave;			// desloca os dois primeiros caracteres para o final da string
 			String	stringResultadoSBox;	// resultado da chave usando S-Box
-			int		xSBox, ySBox;			// coordenadas da tabela S-Box
 			String	stringTabelaRCON;
+			int		xSBox, ySBox;			// coordenadas da tabela S-Box
+			int		indiceInterno;
 			long	longResultadoSBox;
 			long	xorSBoxRCON;
 			long	longChave;
 			long	xorChaveRCONSubWord;
 			long	longTabelaRCON;
-			int		indiceInterno;
 
 			for (int i = 4; i < 44; i++) {
 				// RotWord-------------------------------------------------------------------------------------------
@@ -87,109 +80,236 @@ public class Aes {
 				// converte o caractere para o valor inteiro correspondente
 				// 'a' = 10; 'b' = 11; 'c' = 12; 'd' = 13; 'e' = 14; 'f' = 15
 				for (int x = 0; x < 8; x++) {
-					xSBox = Character.getNumericValue(rotWordChave.charAt(x));			// pega a linha da tabela S-Box
+					xSBox = Character.getNumericValue(rotWordChave.charAt(x));				// pega a linha da tabela S-Box
 					x++;
-					ySBox = Character.getNumericValue(rotWordChave.charAt(x));			// pega a coluna da tabela S-Box
+					ySBox = Character.getNumericValue(rotWordChave.charAt(x));				// pega a coluna da tabela S-Box
 
-					stringResultadoSBox += String.format("%02x", sBox[xSBox][ySBox]);	// pega o valor da tabela S-Box
+					stringResultadoSBox += String.format("%02x", Aes.sBox[xSBox][ySBox]);	// pega o valor da tabela S-Box
 					// "%02x" fixa a saída para 2 caracteres
 				}
 
 				// XOR RCON e SubWord--------------------------------------------------------------------------------
-				// xor entre o valor encontrado no S-BOX com a tabelaRCON
-				stringTabelaRCON = String.format("%08x", Aes.tabelaRCON[i / 4]);
-				//long talv = Long.parseLong(stringTabelaRCON, 16);
-				//byte b = -1;
-
-				//System.out.println(Integer.toHexString(b & Aes.tabelaRCON[i / 4]));
-				//System.out.println(Integer.toHexString(Aes.tabelaRCON[i / 4]));
+				stringTabelaRCON = String.format("%08x", Aes.tabelaRCON[i / numeroPalavras]);	// int para string
  
-				longResultadoSBox = Long.parseLong(stringResultadoSBox, 16);	// string para long
-				longTabelaRCON = Long.parseLong(stringTabelaRCON, 16);			// string para long
-				xorSBoxRCON = longResultadoSBox ^ longTabelaRCON;				// xor
-				/*String	stringXorSBoxRCON = String.format("%08x", xorSBoxRCON);	// long para string
-
-				if (i == 32)
-					System.out.println(stringXorSBoxRCON);*/
+				longResultadoSBox = Long.parseLong(stringResultadoSBox, 16);					// string para long
+				longTabelaRCON = Long.parseLong(stringTabelaRCON, 16);							// string para long
+				xorSBoxRCON = longResultadoSBox ^ longTabelaRCON;								// xor
 
 				// w[i-Nk] e XOR-------------------------------------------------------------------------------------
 				// conversao de string para long e xor. Depois long para string
-				longChave = Long.parseLong(chaves[i - 4], 16);			// string para long
+				longChave = Long.parseLong(chaves[i - numeroPalavras], 16);	// string para long
+				xorChaveRCONSubWord = longChave ^ xorSBoxRCON;				// xor
+				chaves[i] = String.format("%08x", xorChaveRCONSubWord);		// long para string
+
+				for (indiceInterno = 0; indiceInterno < 3; indiceInterno++) {
+					i++;
+
+					longChave = Long.parseLong(chaves[i - numeroPalavras], 16);	// string para long
+					xorChaveRCONSubWord = longChave ^ xorChaveRCONSubWord;		// xor
+					chaves[i] = String.format("%08x", xorChaveRCONSubWord);		// long para string
+				}
+			}
+		// 192 bits
+		} else if (tamanhoChave == 24) {
+			String hexChave;			// contém o formato hexadecimal da chave
+			chaves = new String[52];	// 52 subchaves
+			numeroPalavras = 6;
+
+			// string para hex
+			// "%048x" significa que a string hexadecimal terá 48 caracteres
+			hexChave = String.format("%048x", new BigInteger(1, chave.getBytes()));
+			//hexChave = "8e73b0f7da0e6452c810f32b809079e562f8ead2522c6b7b";
+			System.out.print("Chave hexadecimal:   ");
+			System.out.println(hexChave);
+			
+			System.out.println();
+
+			// separa a chave hexadecimal para as subchaves
+			chaves[0] = hexChave.substring(0, 8);
+			chaves[1] = hexChave.substring(8, 16);
+			chaves[2] = hexChave.substring(16, 24);
+			chaves[3] = hexChave.substring(24, 32);
+			chaves[4] = hexChave.substring(32, 40);
+			chaves[5] = hexChave.substring(40, 48);
+
+			String	rotWordChave;			// desloca os dois primeiros caracteres para o final da string
+			String	stringResultadoSBox;	// resultado da chave usando S-Box
+			String	stringTabelaRCON;
+			int		xSBox, ySBox;			// coordenadas da tabela S-Box
+			int		indiceInterno;
+			long	longResultadoSBox;
+			long	xorSBoxRCON;
+			long	longChave;
+			long	xorChaveRCONSubWord;
+			long	longTabelaRCON;
+
+			for (int i = 6; i < 52; i++) {
+				// RotWord-------------------------------------------------------------------------------------------
+				rotWordChave = chaves[i - 1].substring(2, 8) + chaves[i - 1].substring(0, 2);
+
+				// SubWord-------------------------------------------------------------------------------------------
+				stringResultadoSBox = "";
+				
+				// converte o caractere para o valor inteiro correspondente
+				// 'a' = 10; 'b' = 11; 'c' = 12; 'd' = 13; 'e' = 14; 'f' = 15
+				for (int x = 0; x < 8; x++) {
+					xSBox = Character.getNumericValue(rotWordChave.charAt(x));				// pega a linha da tabela S-Box
+					x++;
+					ySBox = Character.getNumericValue(rotWordChave.charAt(x));				// pega a coluna da tabela S-Box
+
+					stringResultadoSBox += String.format("%02x", Aes.sBox[xSBox][ySBox]);	// pega o valor da tabela S-Box
+					// "%02x" fixa a saída para 2 caracteres
+				}
+
+				// XOR RCON e SubWord--------------------------------------------------------------------------------
+				stringTabelaRCON = String.format("%08x", Aes.tabelaRCON[i / numeroPalavras]);	// int para string
+ 
+				longResultadoSBox = Long.parseLong(stringResultadoSBox, 16);					// string para long
+				longTabelaRCON = Long.parseLong(stringTabelaRCON, 16);							// string para long
+				xorSBoxRCON = longResultadoSBox ^ longTabelaRCON;								// xor
+
+				// w[i-Nk] e XOR-------------------------------------------------------------------------------------
+				// conversao de string para long e xor. Depois long para string
+				longChave = Long.parseLong(chaves[i - numeroPalavras], 16);			// string para long
 				xorChaveRCONSubWord = longChave ^ xorSBoxRCON;			// xor
 				chaves[i] = String.format("%08x", xorChaveRCONSubWord);	// long para string
 
-				//System.out.print(i + ": ");
-				//System.out.print(chaves[i]);
+				// se não for as últimas 4 chaves
+				if (i != 48) {
+					for (indiceInterno = 0; indiceInterno < 5; indiceInterno++) {
+						i++;
 
-				indiceInterno = 0;
-				while (indiceInterno != 3) {
-					i++;
-					indiceInterno++;
+						longChave = Long.parseLong(chaves[i - numeroPalavras], 16);	// string para long
+						xorChaveRCONSubWord = longChave ^ xorChaveRCONSubWord;		// xor
+						chaves[i] = String.format("%08x", xorChaveRCONSubWord);		// long para string
+					}
+				// se chegar nas últimas 4 chaves
+				} else {
+					for (indiceInterno = 0; indiceInterno < 3; indiceInterno++) {
+						i++;
 
-					longChave = Long.parseLong(chaves[i - 4], 16);
-					xorChaveRCONSubWord = longChave ^ xorChaveRCONSubWord;
-					chaves[i] = String.format("%08x", xorChaveRCONSubWord);
-
-					//System.out.print("  " + i + ": ");
-					//System.out.print(chaves[i]);
+						longChave = Long.parseLong(chaves[i - numeroPalavras], 16);	// string para long
+						xorChaveRCONSubWord = longChave ^ xorChaveRCONSubWord;		// xor 
+						chaves[i] = String.format("%08x", xorChaveRCONSubWord);		// long para string
+					}
 				}
-				
-				//System.out.println();
 			}
+		// 256 bits
+		} else {
+			String hexChave;			// contém o formato hexadecimal da chave
+			chaves = new String[60];	// 60 subchaves
+			numeroPalavras = 8;
 
-
-			/*// RotWord-------------------------------------------------------------------------------------------
-			String rotWordChave;
-			// desloca os dois primeiros caracteres para o final da string
-			rotWordChave = chaves[3].substring(2, 8) + chaves[3].substring(0, 2);
-
-			// SubWord-------------------------------------------------------------------------------------------
-			// uso do s-box a partir da terceira chave
-			String	stringResultadoSBox = "";	// resultado da terceira chave usando S-Box
-			int		xSBox, ySBox;		// coordenadas da tabela S-Box
+			// string para hex
+			// "%048x" significa que a string hexadecimal terá 48 caracteres
+			hexChave = String.format("%064x", new BigInteger(1, chave.getBytes()));
+			//hexChave = "603deb1015ca71be2b73aef0857d77811f352c073b6108d72d9810a30914dff4";
+			System.out.print("Chave hexadecimal:   ");
+			System.out.println(hexChave);
 			
-			// converte o caractere para o valor inteiro correspondente
-			// 'a' = 10; 'b' = 11; 'c' = 12; 'd' = 13; 'e' = 14; 'f' = 15
-			for (int i = 0; i < 8; i++) {
-				xSBox = Character.getNumericValue(rotWordChave.charAt(i));		// pega a linha da tabela S-Box
-				i++;
-				ySBox = Character.getNumericValue(rotWordChave.charAt(i));		// pega a coluna da tabela S-Box
+			System.out.println();
 
-				stringResultadoSBox += String.format("%02x", sBox[xSBox][ySBox]);	// pega o valor da tabela S-Box
-				// "%02x" fixa a saída para 2 caracteres
+			// separa a chave hexadecimal para as subchaves
+			chaves[0] = hexChave.substring(0, 8);
+			chaves[1] = hexChave.substring(8, 16);
+			chaves[2] = hexChave.substring(16, 24);
+			chaves[3] = hexChave.substring(24, 32);
+			chaves[4] = hexChave.substring(32, 40);
+			chaves[5] = hexChave.substring(40, 48);
+			chaves[6] = hexChave.substring(48, 56);
+			chaves[7] = hexChave.substring(56, 64);
+
+			String	rotWordChave;			// desloca os dois primeiros caracteres para o final da string
+			String	stringResultadoSBox;	// resultado da chave usando S-Box
+			String	stringTabelaRCON;
+			int		xSBox, ySBox;			// coordenadas da tabela S-Box
+			int		indiceInterno;
+			long	longResultadoSBox;
+			long	xorSBoxRCON;
+			long	longChave;
+			long	xorChaveRCONSubWord;
+			long	longTabelaRCON;
+
+			for (int i = 8; i < 59; i++) {
+				// RotWord-------------------------------------------------------------------------------------------
+				rotWordChave = chaves[i - 1].substring(2, 8) + chaves[i - 1].substring(0, 2);
+
+				// SubWord-------------------------------------------------------------------------------------------
+				stringResultadoSBox = "";
+				
+				// converte o caractere para o valor inteiro correspondente
+				// 'a' = 10; 'b' = 11; 'c' = 12; 'd' = 13; 'e' = 14; 'f' = 15
+				for (int x = 0; x < 8; x++) {
+					xSBox = Character.getNumericValue(rotWordChave.charAt(x));				// pega a linha da tabela S-Box
+					x++;
+					ySBox = Character.getNumericValue(rotWordChave.charAt(x));				// pega a coluna da tabela S-Box
+
+					stringResultadoSBox += String.format("%02x", Aes.sBox[xSBox][ySBox]);	// pega o valor da tabela S-Box
+					// "%02x" fixa a saída para 2 caracteres
+				}
+
+				// XOR RCON e SubWord--------------------------------------------------------------------------------
+				stringTabelaRCON = String.format("%08x", Aes.tabelaRCON[i / numeroPalavras]);	// int para string
+ 
+				longResultadoSBox = Long.parseLong(stringResultadoSBox, 16);					// string para long
+				longTabelaRCON = Long.parseLong(stringTabelaRCON, 16);							// string para long
+				xorSBoxRCON = longResultadoSBox ^ longTabelaRCON;								// xor
+
+				// w[i-Nk] e XOR-------------------------------------------------------------------------------------
+				// conversao de string para long e xor. Depois long para string
+				longChave = Long.parseLong(chaves[i - numeroPalavras], 16);			// string para long
+				xorChaveRCONSubWord = longChave ^ xorSBoxRCON;			// xor
+				chaves[i] = String.format("%08x", xorChaveRCONSubWord);	// long para string
+
+				// se não for as últimas 4 chaves
+				if (i != 56) {
+					for (indiceInterno = 0; indiceInterno < 3; indiceInterno++) {
+						i++;
+
+						longChave = Long.parseLong(chaves[i - numeroPalavras], 16);	// string para long
+						xorChaveRCONSubWord = longChave ^ xorChaveRCONSubWord;		// xor
+						chaves[i] = String.format("%08x", xorChaveRCONSubWord);		// long para string
+					}
+
+					// SubWord-------------------------------------------------------------------------------------------
+					stringResultadoSBox = "";
+					
+					// converte o caractere para o valor inteiro correspondente
+					// 'a' = 10; 'b' = 11; 'c' = 12; 'd' = 13; 'e' = 14; 'f' = 15
+					for (int x = 0; x < 8; x++) {
+						xSBox = Character.getNumericValue(chaves[i].charAt(x));					// pega a linha da tabela S-Box
+						x++;
+						ySBox = Character.getNumericValue(chaves[i].charAt(x));					// pega a coluna da tabela S-Box
+
+						stringResultadoSBox += String.format("%02x", Aes.sBox[xSBox][ySBox]);	// pega o valor da tabela S-Box
+						// "%02x" fixa a saída para 2 caracteres
+					}
+
+					i++;
+					longChave = Long.parseLong(chaves[i - numeroPalavras], 16);		// string para long
+					longResultadoSBox = Long.parseLong(stringResultadoSBox, 16);	// string para long
+					xorChaveRCONSubWord = longChave ^ longResultadoSBox;			// xor
+					chaves[i] = String.format("%08x", xorChaveRCONSubWord);			// long para string
+
+					for (indiceInterno = 0; indiceInterno < 3; indiceInterno++) {
+						i++;
+
+						longChave = Long.parseLong(chaves[i - numeroPalavras], 16);	// string para long
+						xorChaveRCONSubWord = longChave ^ xorChaveRCONSubWord;		// xor
+						chaves[i] = String.format("%08x", xorChaveRCONSubWord);		// long para string
+					}
+				// se chegar nas últimas 4 chaves
+				} else {
+					for (indiceInterno = 0; indiceInterno < 3; indiceInterno++) {
+						i++;
+
+						longChave = Long.parseLong(chaves[i - numeroPalavras], 16);	// string para long
+						xorChaveRCONSubWord = longChave ^ xorChaveRCONSubWord;		// xor
+						chaves[i] = String.format("%08x", xorChaveRCONSubWord);		// long para string
+					}
+				}
 			}
-
-			System.out.println(stringResultadoSBox);
-
-			// XOR RCON e SubWord--------------------------------------------------------------------------------
-			// xor entre o valor encontrado no S-BOX e a segunda posição da tabelaRCON
-			String stringTabelaRCON = String.format("%08x", tabelaRCON[9]);
-			System.out.println(stringTabelaRCON);
-
-			// conversao de string para long e xor. Depois long para string
-			long	longResultadoSBox = Long.parseLong(stringResultadoSBox, 16);
-			long	xorSBoxRCON = longResultadoSBox ^ tabelaRCON[1];
-			String	stringXorSBoxRCON = String.format("%08x", xorSBoxRCON);
-
-			System.out.println(stringXorSBoxRCON);
-
-			// w[i-Nk] e XOR-------------------------------------------------------------------------------------
-			// conversao de string para long e xor. Depois long para string
-			long	longChave = Long.parseLong(chaves[0], 16);
-			long	xorChaveRCONSubWord = longChave ^ xorSBoxRCON;
-			chaves[4] = String.format("%08x", xorChaveRCONSubWord);
-
-			System.out.println(chaves[4]);
-
-			for (int i = 1; i < 4; i++) {
-				longChave = Long.parseLong(chaves[i], 16);
-				xorChaveRCONSubWord = longChave ^ xorChaveRCONSubWord;
-				chaves[4 + i] = String.format("%08x", xorChaveRCONSubWord);
-
-				System.out.println(chaves[4 + i]);
-			}*/
 		}
-
 		
 		return chaves;
 	}
